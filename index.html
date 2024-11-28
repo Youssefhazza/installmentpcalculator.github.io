@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ayoy Loan Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+      body {
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+      }
+
+      .form-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .form-header h1 {
+        font-size: 1.5rem;
+        color: #333;
+      }
+
+      .result-container {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .form-container {
+          padding: 15px;
+        }
+
+        .form-header h1 {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <div class="form-container">
+        <div class="form-header">
+          <h1>Loan Calculator</h1>
+        </div>
+        <form>
+          <div class="mb-3">
+            <label for="totalPrice" class="form-label">Total Price</label>
+            <input
+              type="number"
+              id="totalPrice"
+              v-model="params.totalPrice"
+              class="form-control"
+              placeholder="Enter total price"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="downPayment" class="form-label">Down Payment</label>
+            <input
+              type="number"
+              id="downPayment"
+              v-model="params.downPayment"
+              class="form-control"
+              placeholder="Enter down payment"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="interest" class="form-label">Interest (%)</label>
+            <input
+              type="number"
+              id="interest"
+              v-model="params.interest"
+              class="form-control"
+              placeholder="Enter interest rate"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="years" class="form-label">Loan Term (Years)</label>
+            <input
+              type="number"
+              id="years"
+              v-model="params.years"
+              class="form-control"
+              placeholder="Enter loan term"
+            />
+          </div>
+        </form>
+
+        <div class="result-container">
+          <p>
+            <strong>Monthly Payment:</strong> {{ params.monthlyPay }}
+          </p>
+          <p>
+            <strong>Total Interest:</strong> {{ params.totalInterest }}
+          </p>
+          <p>
+            <strong>Total Amount:</strong> {{ params.totalAmount }}
+          </p>
+          <p>
+            You will pay <strong>{{ params.monthlyPay }}</strong> per month over
+            <strong>{{ params.years }}</strong> years.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            params: {
+              totalPrice: "",
+              downPayment: "",
+              interest: "",
+              years: "",
+              monthlyPay: "",
+              totalInterest: "",
+              totalAmount: "",
+            },
+          };
+        },
+        watch: {
+          params: {
+            handler(newValue, oldValue) {
+              this.calculate();
+            },
+            deep: true,
+          },
+        },
+        methods: {
+          calculate() {
+            const instalmentAmount =
+              this.params.totalPrice - this.params.downPayment;
+            this.params.totalInterest =
+              (instalmentAmount / 100) *
+              this.params.interest *
+              this.params.years;
+            this.params.totalAmount =
+              this.params.totalInterest + instalmentAmount;
+            this.params.monthlyPay = (
+              this.params.totalAmount /
+              (this.params.years * 12)
+            ).toFixed(2);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
