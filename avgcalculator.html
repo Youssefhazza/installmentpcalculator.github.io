@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>new avg Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+      body {
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+      }
+
+      .form-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .form-header h1 {
+        font-size: 1.5rem;
+        color: #333;
+      }
+
+      .result-container {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .form-container {
+          padding: 15px;
+        }
+
+        .form-header h1 {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <div class="form-container">
+        <div class="form-header">
+          <h1>New AVG price Calculator</h1>
+        </div>
+        <form>
+          <div class="mb-3">
+            <label for="currentAmount" class="form-label"
+              >hena 3adad el as-hom elly ma3aak</label
+            >
+            <input
+              type="number"
+              id="currentAmount"
+              v-model="params.currentAmount"
+              class="form-control"
+              placeholder="hena 3adad el as-hom elly ma3aak"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="currentAvgPrice" class="form-label"
+              >hena el price mn my position</label
+            >
+            <input
+              type="number"
+              id="currentAvgPrice"
+              v-model="params.currentAvgPrice"
+              class="form-control"
+              placeholder="hena el price mn my position"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="NewAmount" class="form-label"
+              >hena hateshtry kam sahm gdeed</label
+            >
+            <input
+              type="number"
+              id="NewAmount"
+              v-model="params.NewAmount"
+              class="form-control"
+              placeholder="hena hateshtry kam sahm gdeed"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="NewPrice" class="form-label"
+              >hena el se3r ely hatshtry gdeed 3aleh</label
+            >
+            <input
+              type="number"
+              id="NewPrice"
+              v-model="params.NewPrice"
+              class="form-control"
+              placeholder="hena el se3r ely hatshtry gdeed 3aleh"
+            />
+          </div>
+        </form>
+
+        <div class="result-container">
+          <p>
+            <strong>your New Avg stock price will be </strong> {{
+            params.newAVGPrice }}
+          </p>
+          <!-- <p><strong>white part id: </strong> {{ params.Wpart }}</p>
+          <p><strong>for total: </strong> {{ params.currentAmount }}</p> -->
+          <!-- <p>
+            You will pay <strong>{{ params.monthlyPay }}</strong> per month over
+            <strong>{{ params.years }}</strong> years.
+          </p> -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            params: {
+              currentAmount: "",
+              currentAvgPrice: "",
+              NewAmount: "",
+              NewPrice: "",
+              newStockTotal: "",
+              newAVGPrice: "",
+            },
+          };
+        },
+        watch: {
+          params: {
+            handler(newValue, oldValue) {
+              this.calculate();
+            },
+            deep: true,
+          },
+        },
+        methods: {
+          calculate() {
+            // var oldCost=this.params.currentAmount *this.params.currentAvgPrice;
+            // var newCost=this.params.NewAmount*this.params.NewPrice
+            // var totalcost=Number(oldCost)+Number(newCost);
+            // var totalStocks= this.params.currentAmount +this.params.NewAmount;
+            // this.params.newAVGPrice=totalcost/totalStocks;
+            // console.log(`total cost is ${totalcost}`);
+            // console.log(`total stocks is ${totalStocks}`);
+            // console.log(`total new xost bs  is ${newCost}`);
+
+            const currentAmount = Number(this.params.currentAmount);
+            const currentAvgPrice = Number(this.params.currentAvgPrice);
+            const newAmount = Number(this.params.NewAmount);
+            const newPrice = Number(this.params.NewPrice);
+
+            const oldCost = currentAmount * currentAvgPrice;
+            const newCost = newAmount * newPrice;
+            const totalCost = oldCost + newCost;
+            const totalStocks = currentAmount + newAmount;
+
+            if (totalStocks > 0) {
+              this.params.newAVGPrice = (totalCost / totalStocks).toFixed(2);
+            } else {
+              this.params.newAVGPrice = "";
+            }
+
+            console.log(`total cost is ${totalCost}`);
+            console.log(`total stocks is ${totalStocks}`);
+            console.log(`new cost is ${newCost}`);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
